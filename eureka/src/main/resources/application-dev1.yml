@@ -1,0 +1,51 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka
+  #配置登录账号密码
+  security:
+    user:
+      name: admin
+      password: admin
+# 单台
+#eureka:
+#  instance:
+#    #Eureka Server对端口是不敏感的，这意味着，如果直接用IP的形式（例如地址写成http://127.0.0.1:8761/eureka/）相互注册，Eureka Server误认为两个Eureka Server实例是一个实例——这会造成Eureka Server首页显示不正常等一系列问题！！
+#    hostname: 127.0.0.1
+#  # eureka既是服务端，也是客户端
+#  client:
+#    #是否要注册到其他Eureka Server实例（eureka集群需要，单台不需要）
+#    register-with-eureka: false
+#    #是否要从其他Eureka Server实例获取数据
+#    fetch-registry: false
+# 集群
+eureka:
+  instance:
+    #Eureka Server对端口是不敏感的，这意味着，如果直接用IP的形式（例如地址写成http://127.0.0.1:8761/eureka/）相互注册，Eureka Server误认为两个Eureka Server实例是一个实例——这会造成Eureka Server首页显示不正常等一系列问题！！
+    hostname: peer1
+  # eureka既是服务端，也是客户端
+  client:
+    #是否要注册到其他Eureka Server实例（eureka集群需要，单台不需要）
+    register-with-eureka: true
+    #是否要从其他Eureka Server实例获取数据
+    fetch-registry: true
+    #注册Eureka Server
+    service-url:
+      defaultZone: http://admin:admin@peer2:8762/eureka/
+
+management:
+  health:
+    redis:
+      enabled: false
+  endpoint:
+    health:
+      # 为health端点配置显示详情
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        # 暴露metrics端点，如需暴露多个，用,分隔；如需暴露所有端点，用'*'
+        include: "*"
+        # 不暴露哪些端点
+        exclude: env,beans,configprops
